@@ -9,8 +9,10 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -27,6 +29,8 @@ public class App extends Application {
 		Application.launch(App.class, args);
 	}
 
+	private Browser browser;
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -36,7 +40,12 @@ public class App extends Application {
 		final BrowserView browserView = new BrowserView(browser);
 		browserView.setStyle("-fx-border-style: solid;");
 
-		final HBox buttonRow = new HBox(new Button("button 1"), new Button("button 2"));
+		final HBox buttonRow = new HBox(new Button("button 1"), new Button("button 2"), new TextField());
+		buttonRow.setPadding(new Insets(10.0));
+		buttonRow.setSpacing(10.0);
+		buttonRow.setStyle("-fx-border-style: solid;");
+
+		final VBox buttonColumn = new VBox(new Button("button A"), new Button("button B"));
 		buttonRow.setPadding(new Insets(10.0));
 		buttonRow.setSpacing(10.0);
 		buttonRow.setStyle("-fx-border-style: solid;");
@@ -44,6 +53,7 @@ public class App extends Application {
 		final BorderPane pane = new BorderPane();
 		pane.setCenter(browserView);
 		pane.setBottom(buttonRow);
+		pane.setRight(buttonColumn);
 		pane.setPrefSize(1024.0, 768.0);
 
 		final Scene scene = new Scene(pane);
@@ -52,6 +62,8 @@ public class App extends Application {
 		primaryStage.toFront();
 
 		browser.loadURL("https://www.teamdev.com/jxbrowser");
+
+		setBrowser(browser);
 	}
 
 	/**
@@ -69,7 +81,23 @@ public class App extends Application {
 	 */
 	@Override
 	public void stop() throws Exception {
+		getBrowser().dispose();
 		BrowserCore.shutdown();
+	}
+
+	/**
+	 * @return the browser
+	 */
+	public Browser getBrowser() {
+		return browser;
+	}
+
+	/**
+	 * @param browser
+	 *            the browser to set
+	 */
+	public void setBrowser(Browser browser) {
+		this.browser = browser;
 	}
 
 }
